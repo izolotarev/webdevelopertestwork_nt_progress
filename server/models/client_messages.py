@@ -7,6 +7,7 @@ from typing import TypeVar, TYPE_CHECKING
 import bidict as bidict
 import fastapi
 import pydantic
+from pydantic import validator, Field
 
 from server import message_processors, enums
 from server.models.base import Envelope, Message
@@ -34,10 +35,17 @@ class ClientMessage(Message):
 class SubscribeMarketData(ClientMessage):
     instrument: enums.Instrument
 
+    #"message":{"instrument":2}
+    #convert 2 to enums.Instrument
+    @validator("instrument", pre=True)
+    def convert_int_to_enum(cls, v):
+        instrument_list = [e for e in enums.Instrument]
+        return instrument_list[v - 1]
+
+
 
 class UnsubscribeMarketData(ClientMessage):
     subscription_id: uuid.UUID
-
 
 class PlaceOrder(ClientMessage):
     instrument: enums.Instrument
@@ -56,4 +64,5 @@ _CLIENT_MESSAGE_TYPE_BY_CLASS = bidict.bidict({
     UnsubscribeMarketData: enums.ClientMessageType.unsubscribe_market_data,
     PlaceOrder: enums.ClientMessageType.place_order,
 })
+
 ClientMessageT = TypeVar('ClientMessageT', bound=ClientMessage)

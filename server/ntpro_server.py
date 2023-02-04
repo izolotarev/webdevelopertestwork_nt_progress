@@ -34,4 +34,10 @@ class NTProServer:
     @staticmethod
     async def send(message: base.MessageT, websocket: fastapi.WebSocket):
         await websocket.send_json(server_messages.ServerEnvelope(message_type=message.get_type(),
-                                                                 message=message.dict()).dict())
+                                                                 message=message.dict(by_alias = True, exclude_unset = True)).dict(by_alias = True))
+    
+    #by_alias = True flag applies snake_to_camel function to field names
+    #exlude_unset = True removes unset values 
+    
+
+            

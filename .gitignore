@@ -1,7 +1,13 @@
-/node_modules
+client/node_modules
+server/.venv/
+server/__pycache__/
+server/models/__pycache__/
+
 
 .idea/misc.xml
 .idea/vcs.xml
 .idea/workspace.xml
 
 *.egg-info
+
+/.venv

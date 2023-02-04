@@ -3,10 +3,10 @@ import pathlib
 
 import fastapi
 
-import ntpro_server
+from server.ntpro_server import NTProServer
 
 api = fastapi.FastAPI()
-server = ntpro_server.NTProServer()
+server = NTProServer()
 html = pathlib.Path('test.html').read_text()
 
 
