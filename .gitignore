@@ -1,7 +1,7 @@
 client/node_modules
 server/.venv/
-server/__pycache__/
-server/models/__pycache__/
+*__pycache__/
+
 
 
 .idea/misc.xml
@@ -9,5 +9,3 @@ server/models/__pycache__/
 .idea/workspace.xml
 
 *.egg-info
-
-/.venv

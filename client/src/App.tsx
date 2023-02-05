@@ -1,7 +1,10 @@
-import React from 'react';
-import './App.css';
 import { Instrument } from './Enums';
 import { wsClient } from './WSClient';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import OrderTable from './components/order-table/order-table';
+import Ticker from './components/ticker/ticker';
+import { Container } from 'react-bootstrap';
+
 
 function App() {
   
@@ -13,13 +16,10 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <Container>
+      <Ticker></Ticker>
+      <OrderTable/>
+    </Container>
   );
 }
 
