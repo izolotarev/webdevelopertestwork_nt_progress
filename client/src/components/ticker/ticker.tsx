@@ -8,8 +8,6 @@ import { Instrument } from '../../Enums';
 
 function Ticker() {
 
-  const instruments = Object.keys(Instrument);
-
   const [instrument, setInstrument] = useState(0);
 
   const handleSelectChange = (evt: ChangeEvent<HTMLSelectElement> ) => {
@@ -23,7 +21,7 @@ function Ticker() {
         <Form.Select aria-label="Default select" onChange={handleSelectChange}>
           <option value={0}>Please select instrument</option>
           {
-            instruments
+            Object.keys(Instrument)
               .filter((k) => parseInt(k))
               .map((k) => {
                 const n = parseInt(k)
@@ -47,12 +45,12 @@ function Ticker() {
       </Row>
       <Row>
         <Col className="border-right">
-          <Button variant="danger" type="submit">
+          <Button className="btn-large" variant="danger" type="submit">
             Sell
           </Button>
         </Col>
         <Col>
-          <Button variant="success" type="submit">
+          <Button className="btn-large" variant="success" type="submit">
             Buy
           </Button>
         </Col>
