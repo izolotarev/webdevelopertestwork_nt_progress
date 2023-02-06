@@ -8,6 +8,7 @@ from typing import TypeVar
 import pydantic
 
 from server.enums import ClientMessageType, ServerMessageType
+from pydantic import root_validator
 
 
 def snake_to_camel(snake_str: str) -> str:
@@ -54,6 +55,15 @@ class Quote(pydantic.BaseModel):
     offer: decimal.Decimal
     min_amount: decimal.Decimal
     max_amount: decimal.Decimal
+
+    #serialize to str
+    @root_validator()
+    def dec_to_str(cls, values):
+        values["bid"] = str(values["bid"])
+        values["offer"] = str(values["offer"])
+        values["min_amount"] = str(values["min_amount"])
+        values["max_amount"] = str(values["max_amount"])
+        return values
 
 
 MessageT = TypeVar('MessageT', bound=Message)

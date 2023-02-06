@@ -1,13 +1,17 @@
 import {ClientMessage} from "./Models/ClientMessages";
 import {ClientMessageType, Instrument, OrderSide, ServerMessageType} from "./Enums";
 import Decimal from "decimal.js";
-import {ServerEnvelope} from "./Models/ServerMessages";
+import {MarketDataUpdate, ServerEnvelope, SuccessInfo} from "./Models/ServerMessages";
+import { StoreType } from './index';
+import { loadQuoteAction, subscribeMarketDataAction } from './store/actions/actions';
 
-class WSConnector {
+export default class WSConnector {
   connection: WebSocket | undefined;
+  store: StoreType | undefined;
 
-  constructor() {
+  constructor(store: StoreType) {
     this.connection = undefined;
+    this.store = store;
   }
 
   connect = () => {
@@ -25,11 +29,14 @@ class WSConnector {
     };
 
     this.connection.onmessage = (event) => {
-      const message: ServerEnvelope = JSON.parse(event.data);
-      console.log(message);
-      switch (message.messageType) {
+      const envelope: ServerEnvelope = JSON.parse(event.data);
+      switch (envelope.messageType) {
         case ServerMessageType.success:
-          
+          const message: SuccessInfo = envelope.message
+
+          if (message.subscriptionId && this.store) {
+            this.store.dispatch(subscribeMarketDataAction(message.subscriptionId));
+          }
           break;
         case ServerMessageType.error:
           
@@ -38,7 +45,12 @@ class WSConnector {
 
           break;
         case ServerMessageType.marketDataUpdate:
-
+          const marketDataMessage: MarketDataUpdate = envelope.message
+          if (marketDataMessage.quotes.length > 0 && marketDataMessage.instrument) {
+            const instrument = marketDataMessage.instrument;
+            const quote = marketDataMessage.quotes[0];
+            this.store?.dispatch(loadQuoteAction(quote, instrument));
+          }
           break;
       }
     };
@@ -82,5 +94,3 @@ class WSConnector {
     });
   }
 }
-
-export const wsClient = new WSConnector(); 

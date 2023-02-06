@@ -25,9 +25,9 @@ class ErrorInfo(ServerMessage):
 
 class SuccessInfo(ServerMessage):
     subscription_id: Optional[uuid.UUID] = Field(None)
-    
     _vaidate_id = validator("subscription_id", allow_reuse = True)(uuid_to_str)
 
+    description: Optional[str] = Field(None)
 
 class ExecutionReport(ServerMessage):
     order_id: uuid.UUID

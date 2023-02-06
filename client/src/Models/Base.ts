@@ -4,7 +4,7 @@ import {ServerMessage} from "./ServerMessages";
 
 export interface Envelope {
     messageType: ClientMessage | ServerMessage
-    message: object
+    message: any
 }
 
 export interface Message {
