@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { MarketState, } from '../../../types/types';
-import { loadQuoteAction, subscribeMarketDataAction, unsubscribeMarketDataAction } from '../../actions/actions';
+import { loadOrdersAction, loadQuoteAction, subscribeMarketDataAction, unsubscribeMarketDataAction } from '../../actions/actions';
 
 
 
@@ -8,6 +8,8 @@ export const initialState: MarketState = {
   subscriptionId: '',
   instrument: undefined,
   quote: undefined,
+  orders: undefined,
+  ordersLoaded: false,
 };
 
 export const marketData = createReducer(initialState, (builder) => {
@@ -23,5 +25,9 @@ export const marketData = createReducer(initialState, (builder) => {
     .addCase(loadQuoteAction, (state, action) => {
       state.quote = action.payload.quote;
       state.instrument = action.payload.instrument;
-    });
+    })
+    .addCase(loadOrdersAction, (state, action) => {
+      state.orders = action.payload.orders;
+      state.ordersLoaded = true;
+    })
 });

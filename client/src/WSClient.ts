@@ -3,7 +3,7 @@ import {ClientMessageType, Instrument, OrderSide, ServerMessageType} from "./Enu
 import Decimal from "decimal.js";
 import {MarketDataUpdate, ServerEnvelope, SuccessInfo} from "./Models/ServerMessages";
 import { StoreType } from './index';
-import { loadQuoteAction, subscribeMarketDataAction } from './store/actions/actions';
+import { loadOrdersAction, loadQuoteAction, subscribeMarketDataAction } from './store/actions/actions';
 
 export default class WSConnector {
   connection: WebSocket | undefined;
@@ -25,7 +25,7 @@ export default class WSConnector {
     };
 
     this.connection.onopen = () => {
-      
+      this.getOrders();
     };
 
     this.connection.onmessage = (event) => {
@@ -34,9 +34,20 @@ export default class WSConnector {
         case ServerMessageType.success:
           const message: SuccessInfo = envelope.message
 
-          if (message.subscriptionId && this.store) {
-            this.store.dispatch(subscribeMarketDataAction(message.subscriptionId));
+          if (message.subscriptionId) {
+            this.store?.dispatch(subscribeMarketDataAction(message.subscriptionId));
           }
+
+          if (message.order) {
+            // send message to server. get all orders
+            this.getOrders();
+          }
+
+          if (message.orders && message.orders.length > 0) {
+            console.log(message.orders)
+            this.store?.dispatch(loadOrdersAction(message.orders))
+          }
+
           break;
         case ServerMessageType.error:
           
@@ -92,5 +103,12 @@ export default class WSConnector {
         price,
       }
     });
+  }
+
+  getOrders = () => {
+    this.send({
+      messageType: ClientMessageType.getOrders,
+      message: {}
+    })
   }
 }

@@ -1,6 +1,6 @@
 import random
 from decimal import Decimal
-from server.enums import Instrument
+from server.enums import Instrument, OrderStatus
 from server.models.base import Quote
 
 def uuid_to_str(cls, v):
@@ -8,7 +8,7 @@ def uuid_to_str(cls, v):
         return str(v)
     return v
 
-def dec_to_str(cls, v):
+def to_str(cls, v):
     return str(v)
 
 def generateQuote(inst: Instrument):
@@ -30,3 +30,7 @@ def generateQuote(inst: Instrument):
 def decimalInRange(a, b):
     n = random.uniform(a, b)
     return round(Decimal(n), 4)
+
+def generateStatus():
+    n = random.randint(1, 3)
+    return OrderStatus(n)

@@ -7,6 +7,7 @@ class ClientMessageType(enum.IntEnum):
     subscribe_market_data = enum.auto()
     unsubscribe_market_data = enum.auto()
     place_order = enum.auto()
+    get_orders = enum.auto()
 
 
 class ServerMessageType(enum.IntEnum):
@@ -27,7 +28,7 @@ class OrderStatus(enum.IntEnum):
     rejected = enum.auto()
     cancelled = enum.auto()
 
-class Instrument(str, enum.Enum):
+class Instrument(enum.IntEnum):
     eur_usd = enum.auto()
     eur_rub = enum.auto()
     usd_rub = enum.auto()

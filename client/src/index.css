@@ -16,3 +16,11 @@
 .btn-large {
   width: 100%;
 }
+
+.font-green {
+  color: green !important;
+}
+
+.font-red {
+  color: red !important;
+}

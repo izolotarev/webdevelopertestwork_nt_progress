@@ -35,14 +35,6 @@ class ClientMessage(Message):
 class SubscribeMarketData(ClientMessage):
     instrument: enums.Instrument
 
-    #"message":{"instrument":2}
-    #convert 2 to enums.Instrument
-    @validator("instrument", pre=True)
-    def convert_int_to_enum(cls, v):
-        instrument_list = [e for e in enums.Instrument]
-        return instrument_list[v - 1]
-
-
 
 class UnsubscribeMarketData(ClientMessage):
     subscription_id: uuid.UUID
@@ -53,16 +45,20 @@ class PlaceOrder(ClientMessage):
     amount: pydantic.condecimal(gt=decimal.Decimal())
     price: pydantic.condecimal(gt=decimal.Decimal())
 
+class GetOrders(ClientMessage):
+    pass
 
 _MESSAGE_PROCESSOR_BY_CLASS = {
     SubscribeMarketData: message_processors.subscribe_market_data_processor,
     UnsubscribeMarketData: message_processors.unsubscribe_market_data_processor,
     PlaceOrder: message_processors.place_order_processor,
+    GetOrders: message_processors.get_orders_processor,
 }
 _CLIENT_MESSAGE_TYPE_BY_CLASS = bidict.bidict({
     SubscribeMarketData: enums.ClientMessageType.subscribe_market_data,
     UnsubscribeMarketData: enums.ClientMessageType.unsubscribe_market_data,
     PlaceOrder: enums.ClientMessageType.place_order,
+    GetOrders: enums.ClientMessageType.get_orders,
 })
 
 ClientMessageT = TypeVar('ClientMessageT', bound=ClientMessage)

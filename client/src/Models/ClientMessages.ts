@@ -1,4 +1,4 @@
-import {Envelope, Message} from "./Base";
+import {Envelope, Message, Order} from "./Base";
 import {ClientMessageType, Instrument, OrderSide} from "../Enums";
 import Decimal from "decimal.js";
 
@@ -23,4 +23,9 @@ export interface PlaceOrder extends ClientMessage {
     side: OrderSide
     amount: Decimal
     price: Decimal
+}
+
+
+export interface GetOrders extends ClientMessage {
+    orders: [Order]
 }

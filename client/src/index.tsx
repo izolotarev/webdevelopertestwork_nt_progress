@@ -30,12 +30,8 @@ export const store = configureStore({
 export type AppDispatch = typeof store.dispatch
 export type StoreType = typeof store
 
-
 export const wsClient = new WSConnector(store); //Singleton
 wsClient.connect();
-
-
-
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

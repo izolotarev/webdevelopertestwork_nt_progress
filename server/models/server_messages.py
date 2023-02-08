@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import TypeVar, Optional
+from typing import TypeVar, Optional, List
 
 import bidict as bidict
 
@@ -11,6 +11,7 @@ from server.models.base import Envelope, Message, Quote
 from pydantic import validator, Field, Extra
 from server.models.base import snake_to_camel
 from server.utils import uuid_to_str
+from server.models.db_models import OrderDB
 
 class ServerMessage(Message):
     class Config:
@@ -28,11 +29,12 @@ class SuccessInfo(ServerMessage):
     _vaidate_id = validator("subscription_id", allow_reuse = True)(uuid_to_str)
 
     description: Optional[str] = Field(None)
+    order: Optional[OrderDB] = Field(None)
+    orders: Optional[List[OrderDB]] = Field(None)
 
 class ExecutionReport(ServerMessage):
     order_id: uuid.UUID
     order_status: enums.OrderStatus
-
 
 class MarketDataUpdate(ServerMessage):
     subscription_id: uuid.UUID

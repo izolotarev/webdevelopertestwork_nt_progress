@@ -1,14 +1,15 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Instrument } from '../../Enums';
+import { Instrument, OrderSide } from '../../Enums';
 import { wsClient } from '../../index';
 import { useSelector } from 'react-redux';
 import { getQuote, getSubscriptionId } from '../../store/reducers/market/market-selectors';
 import { useAppDispatch } from '../../hooks/hooks';
 import { unsubscribeMarketDataAction } from '../../store/actions/actions';
+import Decimal from "decimal.js";
 
 function Ticker() {
 
@@ -35,6 +36,33 @@ function Ticker() {
     }
   }, [instrument])
 
+  const [amount, setAmount] = useState('') 
+
+  const handleAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (parseInt(evt.target.value) < 0) {
+      setAmount('0');
+      return;
+    }
+    setAmount(evt.target.value) 
+  }
+
+  const handleSellClick = (evt: SyntheticEvent) => {
+    evt.preventDefault();
+    const amountVal = parseFloat(amount);
+
+    if (!instrument || !amountVal || !quote) {
+      alert("Wrong instrument or amount!")
+      return;
+    }
+
+    wsClient.placeOrder(
+      instrument, 
+      OrderSide.sell, 
+      new Decimal(amountVal), 
+      quote?.bid
+    );
+  }
+
   return (
     <Form className="ticker ticker__wrapper">
       <Form.Group className="mb-3" controlId="formInstrument">
@@ -43,10 +71,10 @@ function Ticker() {
           <option value={0}>Please select instrument</option>
           {
             Object.keys(Instrument)
-              .filter((k) => parseInt(k))
+              .filter((k) => Number(k))
               .map((k) => {
-                const n = parseInt(k)
-                return <option value={n} key={k}>{Instrument[n]}</option>
+                const v = Number(k)
+                return <option value={v} key={k}>{Instrument[v]}</option>
               })
           }
         </Form.Select>
@@ -54,7 +82,7 @@ function Ticker() {
 
       <Form.Group className="mb-3" controlId="formAmount">
         <Form.Label>Amount</Form.Label>
-        <Form.Control placeholder="Enter amount" />
+        <Form.Control type="number" placeholder="Enter amount" onChange={handleAmountChange} value={amount} min="0"/>
       </Form.Group>
       <Row>
         <Col className="border-right">
@@ -66,7 +94,7 @@ function Ticker() {
       </Row>
       <Row>
         <Col className="border-right">
-          <Button className="btn-large" variant="danger" type="submit">
+          <Button className="btn-large" variant="danger" type="submit" onClick={handleSellClick}>
             Sell
           </Button>
         </Col>

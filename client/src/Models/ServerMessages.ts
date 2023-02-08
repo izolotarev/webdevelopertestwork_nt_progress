@@ -1,5 +1,5 @@
 import {Instrument, OrderStatus} from "../Enums";
-import {Envelope, Message, Quote} from "./Base";
+import {Envelope, Message, Order, Quote} from "./Base";
 
 export interface ServerEnvelope extends Envelope {
     messageType: ServerMessage
@@ -16,6 +16,8 @@ export interface ErrorInfo extends ServerMessage {
 export interface SuccessInfo extends ServerMessage {
     subscriptionId?: string
     description?: string
+    order?: Order
+    orders?: [Order]
 }
 
 export interface ExecutionReport extends ServerMessage {
