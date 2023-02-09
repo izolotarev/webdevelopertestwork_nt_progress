@@ -47,6 +47,14 @@ function Ticker() {
   }
 
   const handleSellClick = (evt: SyntheticEvent) => {
+    handlePlaceOrder(evt, OrderSide.sell);
+  }
+
+  const handleBuyClick = (evt: SyntheticEvent) => {
+    handlePlaceOrder(evt, OrderSide.buy);
+  }
+
+  const handlePlaceOrder = (evt: SyntheticEvent, side: OrderSide) => {
     evt.preventDefault();
     const amountVal = parseFloat(amount);
 
@@ -55,13 +63,17 @@ function Ticker() {
       return;
     }
 
+    const price = side === OrderSide.sell ? quote?.bid : quote?.offer
+
     wsClient.placeOrder(
       instrument, 
-      OrderSide.sell, 
+      side, 
       new Decimal(amountVal), 
-      quote?.bid
+      price
     );
   }
+
+
 
   return (
     <Form className="ticker ticker__wrapper">
@@ -71,10 +83,10 @@ function Ticker() {
           <option value={0}>Please select instrument</option>
           {
             Object.keys(Instrument)
-              .filter((k) => Number(k))
-              .map((k) => {
-                const v = Number(k)
-                return <option value={v} key={k}>{Instrument[v]}</option>
+              .filter((key) => Number(key))
+              .map((key) => {
+                const value = Number(key)
+                return <option value={value} key={key}>{Instrument[value]}</option>
               })
           }
         </Form.Select>
@@ -99,7 +111,7 @@ function Ticker() {
           </Button>
         </Col>
         <Col>
-          <Button className="btn-large" variant="success" type="submit">
+          <Button className="btn-large" variant="success" type="submit" onClick={handleBuyClick}>
             Buy
           </Button>
         </Col>
