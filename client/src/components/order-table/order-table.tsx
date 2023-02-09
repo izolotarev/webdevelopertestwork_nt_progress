@@ -1,13 +1,26 @@
 import Table from 'react-bootstrap/Table';
 import { Instrument, OrderSide, OrderStatus } from '../../Enums';
 import { Order } from '../../Models/Base';
-
+import CloseButton from 'react-bootstrap/CloseButton';
+import { SyntheticEvent } from 'react';
+import { wsClient } from '../..';
 
 type OrderTableProps = {
   orders: Order[]
 }
 
 function OrderTable({ orders }: OrderTableProps) {
+
+  const handleCancelClick = (evt: SyntheticEvent) => {
+    if (!(evt.target instanceof HTMLButtonElement)) {
+      return;
+    }
+    const orderId = Number(evt.target.dataset["id"]);
+    if (!orderId) { return; }
+
+    wsClient.cancelOrder(orderId);
+  }
+
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -20,6 +33,7 @@ function OrderTable({ orders }: OrderTableProps) {
           <th>Price</th>
           <th>Amount</th>
           <th>Instrument</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +49,7 @@ function OrderTable({ orders }: OrderTableProps) {
                 <td className={`${order.side === OrderSide.sell ? 'font-red' : 'font-green'}`}>{order.price.toString()}</td>
                 <td className={`${order.side === OrderSide.sell ? 'font-red' : 'font-green'}`}>{order.amount.toString()}</td>
                 <td>{Instrument[order.instrument]}</td>
+                <td><CloseButton data-id={order.id} onClick={handleCancelClick}></CloseButton></td>
               </tr>
             )
           })

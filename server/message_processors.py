@@ -23,7 +23,6 @@ async def subscribe_market_data_processor(
         websocket: fastapi.WebSocket,
         message: client_messages.SubscribeMarketData,
 ):
-    # TODO ...
     con_obj = server.connections[websocket.client]
     random_id = uuid.uuid4()
     send_market_data_task = asyncio.create_task(send_market_data(server, websocket, random_id, message.instrument))
@@ -43,7 +42,6 @@ async def unsubscribe_market_data_processor(
         websocket: fastapi.WebSocket,
         message: client_messages.UnsubscribeMarketData,
 ):
-    # TODO ...
     con_obj = server.connections[websocket.client]
     task = con_obj.subscriptions[message.subscription_id]
     task.cancel()
@@ -65,7 +63,6 @@ async def place_order_processor(
         websocket: fastapi.WebSocket,
         message: client_messages.PlaceOrder
 ):
-    # TODO ...
     order = OrderCreate(
         status = generateStatus(), 
         instrument = Instrument(message.instrument), 
@@ -92,3 +89,19 @@ async def get_orders_processor(
     results = [OrderDB(**row) for row in rows]
 
     return server_messages.SuccessInfo(orders = results)
+
+async def cancel_order_processor(
+        server: NTProServer,
+        websocket: fastapi.WebSocket,
+        message: client_messages.CancelOrder
+):
+    db = get_database()
+    update_query = (
+        orders.update()
+        .where(orders.c.id == message.order_id)
+        .values(status = OrderStatus.cancelled)
+    )
+    await db.execute(update_query)
+    order = await get_order_or_404(message.order_id)
+
+    return server_messages.SuccessInfo(order = order, description = 'cancelled')

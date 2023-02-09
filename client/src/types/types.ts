@@ -7,7 +7,7 @@ export type MarketState = {
   subscriptionId: string,
   instrument?: Instrument,
   quote?: Quote,
-  orders?: [Order],
+  orders?: Order[],
   ordersLoaded: boolean,
 }
 

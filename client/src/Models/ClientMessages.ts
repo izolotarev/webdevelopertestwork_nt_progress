@@ -25,7 +25,10 @@ export interface PlaceOrder extends ClientMessage {
     price: Decimal
 }
 
-
 export interface GetOrders extends ClientMessage {
-    orders: [Order]
+    orders: Order[]
+}
+
+export interface CancelOrder extends ClientMessage {
+    orderId: number
 }

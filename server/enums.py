@@ -8,6 +8,7 @@ class ClientMessageType(enum.IntEnum):
     unsubscribe_market_data = enum.auto()
     place_order = enum.auto()
     get_orders = enum.auto()
+    cancel_order = enum.auto()
 
 
 class ServerMessageType(enum.IntEnum):

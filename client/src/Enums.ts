@@ -3,6 +3,7 @@ export enum ClientMessageType {
     unsubscribeMarketData,
     placeOrder,
     getOrders,
+    cancelOrder,
 }
 
 export enum ServerMessageType {

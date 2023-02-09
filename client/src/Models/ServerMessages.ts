@@ -17,7 +17,7 @@ export interface SuccessInfo extends ServerMessage {
     subscriptionId?: string
     description?: string
     order?: Order
-    orders?: [Order]
+    orders?: Order[]
 }
 
 export interface ExecutionReport extends ServerMessage {
@@ -28,5 +28,5 @@ export interface ExecutionReport extends ServerMessage {
 export interface MarketDataUpdate extends ServerMessage {
     subscriptionId: string
     instrument: Instrument
-    quotes: [Quote]
+    quotes: Quote[]
 }

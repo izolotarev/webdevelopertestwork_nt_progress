@@ -39,12 +39,10 @@ export default class WSConnector {
           }
 
           if (message.order) {
-            // send message to server. get all orders
             this.getOrders();
           }
 
           if (message.orders && message.orders.length > 0) {
-            console.log(message.orders)
             this.store?.dispatch(loadOrdersAction(message.orders))
           }
 
@@ -111,4 +109,15 @@ export default class WSConnector {
       message: {}
     })
   }
+
+  cancelOrder = (orderId: number) => {
+    this.send({
+      messageType: ClientMessageType.cancelOrder,
+      message: {
+        orderId,
+      }
+    })
+  }
+
+
 }

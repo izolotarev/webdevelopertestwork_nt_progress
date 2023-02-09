@@ -26,7 +26,7 @@ export const loadQuoteAction = createAction(
 
 export const loadOrdersAction = createAction(
   ActionType.LoadOrders,
-  (orders: [Order]) => ({
+  (orders: Order[]) => ({
     payload: {
       orders
     }
