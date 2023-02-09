@@ -10,6 +10,7 @@ import { getQuote, getSubscriptionId } from '../../store/reducers/market/market-
 import { useAppDispatch } from '../../hooks/hooks';
 import { unsubscribeMarketDataAction } from '../../store/actions/actions';
 import Decimal from "decimal.js";
+import { toast } from 'react-toastify';
 
 function Ticker() {
 
@@ -59,7 +60,7 @@ function Ticker() {
     const amountVal = parseFloat(amount);
 
     if (!instrument || !amountVal || !quote) {
-      alert("Wrong instrument or amount!")
+      toast.info("Wrong instrument or amount!");
       return;
     }
 
