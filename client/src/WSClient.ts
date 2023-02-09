@@ -4,6 +4,7 @@ import Decimal from "decimal.js";
 import {MarketDataUpdate, ServerEnvelope, SuccessInfo} from "./Models/ServerMessages";
 import { StoreType } from './index';
 import { loadOrdersAction, loadQuoteAction, subscribeMarketDataAction } from './store/actions/actions';
+import { toast } from 'react-toastify';
 
 export default class WSConnector {
   connection: WebSocket | undefined;
@@ -39,6 +40,7 @@ export default class WSConnector {
           }
 
           if (message.order) {
+            toast.info(`The order with id ${message.order.id} was ${message.description}`)
             this.getOrders();
           }
 
