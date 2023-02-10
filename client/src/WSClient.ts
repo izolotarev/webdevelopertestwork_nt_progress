@@ -17,7 +17,8 @@ export default class WSConnector {
   }
 
   connect = () => {
-    this.connection = new WebSocket('ws://127.0.0.1:8000/ws/');
+    // this.connection = new WebSocket('ws://127.0.0.1:8000/ws/');
+    this.connection = new WebSocket('ws://izolotarev.pythonanywhere.com:8000/ws');
     this.connection.onclose = () => {
       this.connection = undefined;
     };
