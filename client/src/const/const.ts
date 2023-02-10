@@ -5,3 +5,7 @@ export enum ActionType {
   LoadOrders = 'MARKET/LOAD_ORDERS',
   RedirectToRoute = 'USER/REDIRECT',
 }
+
+export const AppRoute = {
+  ROOT: '/',
+};
