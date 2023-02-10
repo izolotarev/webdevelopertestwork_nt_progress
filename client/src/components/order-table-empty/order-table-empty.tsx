@@ -1,5 +1,4 @@
 import Table from 'react-bootstrap/Table';
-import { Instrument, OrderSide, OrderStatus } from '../../Enums';
 
 
 function OrderTableEmpty() {

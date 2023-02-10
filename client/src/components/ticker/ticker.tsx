@@ -37,6 +37,7 @@ function Ticker() {
     if (instrument) {
       wsClient.subscribeMarketData(instrument);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instrument])
 
   const [amount, setAmount] = useState('') 
