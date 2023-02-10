@@ -4,13 +4,15 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { Instrument, OrderSide } from '../../Enums';
-import { wsClient } from '../../index';
 import { useSelector } from 'react-redux';
 import { getQuote, getSubscriptionId } from '../../store/reducers/market/market-selectors';
 import { useAppDispatch } from '../../hooks/hooks';
 import { unsubscribeMarketDataAction } from '../../store/actions/actions';
 import Decimal from "decimal.js";
 import { toast } from 'react-toastify';
+import { wsClient } from '../../wsClientSingleton';
+
+
 
 function Ticker() {
 
@@ -73,8 +75,6 @@ function Ticker() {
       price
     );
   }
-
-
 
   return (
     <Form className="ticker ticker__wrapper">

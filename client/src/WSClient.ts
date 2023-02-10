@@ -2,9 +2,10 @@ import {ClientMessage} from "./Models/ClientMessages";
 import {ClientMessageType, Instrument, OrderSide, ServerMessageType} from "./Enums";
 import Decimal from "decimal.js";
 import {MarketDataUpdate, ServerEnvelope, SuccessInfo} from "./Models/ServerMessages";
-import { StoreType } from './index';
 import { loadOrdersAction, loadQuoteAction, subscribeMarketDataAction } from './store/actions/actions';
 import { toast } from 'react-toastify';
+import { StoreType } from './reduxStore';
+
 
 export default class WSConnector {
   connection: WebSocket | undefined;
@@ -120,6 +121,4 @@ export default class WSConnector {
       }
     })
   }
-
-
 }

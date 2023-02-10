@@ -9,6 +9,7 @@ from server.database import get_database
 from server.models.db_models import orders, OrderCreate, OrderDB
 from fastapi import HTTPException
 from server.models import server_messages
+from datetime import datetime
 
 
 if TYPE_CHECKING:
@@ -99,7 +100,7 @@ async def cancel_order_processor(
     update_query = (
         orders.update()
         .where(orders.c.id == message.order_id)
-        .values(status = OrderStatus.cancelled)
+        .values(status = OrderStatus.cancelled, change_time = datetime.now())
     )
     await db.execute(update_query)
     order = await get_order_or_404(message.order_id)

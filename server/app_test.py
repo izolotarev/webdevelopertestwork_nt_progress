@@ -30,10 +30,12 @@ async def test_websocket_subscribe(websocket_client: TestClient):
 @pytest.mark.asyncio
 async def test_websocket_unsubscribe(websocket_client: TestClient):
     with websocket_client.websocket_connect("/ws/") as websocket:
+        # subscribe
         websocket.send_json({"messageType":1,"message":{"instrument":1}})
         message = websocket.receive_json()
         subscription_id = message["message"]["subscriptionId"]
 
+        # unsubscribe
         websocket.send_json({"messageType":2,"message":{"subscriptionId":subscription_id}})
         message_success = websocket.receive_json()
         assert message_success["messageType"] == 1
