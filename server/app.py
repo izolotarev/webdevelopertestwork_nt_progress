@@ -34,7 +34,7 @@ async def get(path: pathlib.Path):
     return fastapi.responses.PlainTextResponse(static_file, media_type=mime_type)
 
 
-@api.websocket('/ws/')
+@api.websocket('/ws')
 async def websocket_endpoint(websocket: fastapi.WebSocket):
     await server.connect(websocket)
 
