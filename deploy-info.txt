@@ -1,0 +1,2 @@
+Client: https://market-izolotarev.netlify.app/
+Server: https://market-web-service.herokuapp.com/

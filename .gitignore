@@ -1,7 +1,7 @@
 client/node_modules
 server/.venv/
 *__pycache__/
-
+.pytest_cache
 
 
 .idea/misc.xml
