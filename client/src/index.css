@@ -9,6 +9,12 @@
   margin: 20px 0;
 }
 
+@media (max-width: 768px) {
+  .ticker__wrapper {
+    width: 100%;
+  }  
+}
+
 .border-right {
   border-right: 2px solid #ececec
 }
