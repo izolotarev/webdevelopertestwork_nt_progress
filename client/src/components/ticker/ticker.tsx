@@ -11,11 +11,8 @@ import { unsubscribeMarketDataAction } from '../../store/actions/actions';
 import Decimal from "decimal.js";
 import { toast } from 'react-toastify';
 import { wsClient } from '../../wsClientSingleton';
-
-import Modal from 'react-bootstrap/Modal';
 import { ClientOrder } from '../../Models/Base';
-
-
+import TickerPopup from '../ticker-popup/ticker-popup';
 
 function Ticker() {
 
@@ -79,25 +76,12 @@ function Ticker() {
       price
     });
 
-    handleShow();
+    setModalShow(true);
   }
 
   const [order, setOrder]= useState<ClientOrder | undefined>(undefined) 
 
-  const [showPopup, setShowPopup] = useState(false);
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    setOrder(undefined);
-  } 
-  const handleShow = () => setShowPopup(true);
-
-  const handleConfirm = () => {
-    if (!order) { return; }
-    const {instrument, side, amount, price } = order;
-    wsClient.placeOrder(instrument, side, amount, price);
-    handleClosePopup();
-  }
+  const [modalShow, setModalShow] = useState(false);
 
   return (
     <>
@@ -142,23 +126,8 @@ function Ticker() {
           </Col>
         </Row>
       </Form>
-      <Modal show={showPopup} onHide={handleClosePopup} centered instrument={instrument}>
-        <Modal.Header closeButton>
-          <Modal.Title>Please confirm your action</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{order ? `Are you sure you want to ${OrderSide[order.side]} ${Instrument[order.instrument]} for the price: ${order.price}  `: ''}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClosePopup}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleConfirm}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
-  </>
-
-
+      <TickerPopup order={order} show={modalShow} onHide={() => setModalShow(false)} />
+    </>
   );
 }
 
