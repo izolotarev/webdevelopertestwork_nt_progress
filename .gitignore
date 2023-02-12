@@ -8,3 +8,5 @@ server/.venv/
 .idea/workspace.xml
 
 *.egg-info
+
+deploy-info.txt
