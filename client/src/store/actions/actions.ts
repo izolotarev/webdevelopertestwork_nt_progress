@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../../const/const';
 import { Instrument } from '../../Enums';
-import { Order, Quote } from '../../Models/Base';
+import { ServerOrder, Quote } from '../../Models/Base';
 
 export const subscribeMarketDataAction = createAction(
   ActionType.SubscribeMarketData,
@@ -26,7 +26,7 @@ export const loadQuoteAction = createAction(
 
 export const loadOrdersAction = createAction(
   ActionType.LoadOrders,
-  (orders: Order[]) => ({
+  (orders: ServerOrder[]) => ({
     payload: {
       orders
     }

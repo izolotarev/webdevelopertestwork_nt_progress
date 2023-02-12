@@ -20,12 +20,17 @@ export interface Quote {
 }
 
 export interface Order {
-    id: number
-    creationTime: Date
-    changeTime: Date
-    status: OrderStatus
     side: OrderSide
     price: Decimal
     amount: Decimal
     instrument: Instrument
+}
+
+export interface ClientOrder extends Order {}
+
+export interface ServerOrder extends Order {
+    id: number
+    creationTime: Date
+    changeTime: Date
+    status: OrderStatus
 }

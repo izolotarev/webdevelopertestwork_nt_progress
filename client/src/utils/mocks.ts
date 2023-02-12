@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js';
 import { Instrument, OrderSide, OrderStatus } from '../Enums';
-import { Order } from '../Models/Base';
+import { ServerOrder } from '../Models/Base';
 
-export const makeFakeOrder = (): Order => ({
+export const makeFakeOrder = (): ServerOrder => ({
   id: 1,
   creationTime: new Date(),
   changeTime: new Date(),

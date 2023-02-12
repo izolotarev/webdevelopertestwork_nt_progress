@@ -1,6 +1,6 @@
 import Table from 'react-bootstrap/Table';
 import { Instrument, OrderSide, OrderStatus } from '../../Enums';
-import { Order } from '../../Models/Base';
+import { ServerOrder } from '../../Models/Base';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { SyntheticEvent } from 'react';
 import { wsClient } from '../../wsClientSingleton';
@@ -8,7 +8,7 @@ import { wsClient } from '../../wsClientSingleton';
 
 
 type OrderTableProps = {
-  orders: Order[]
+  orders: ServerOrder[]
 }
 
 function OrderTable({ orders }: OrderTableProps) {

@@ -12,6 +12,9 @@ import Decimal from "decimal.js";
 import { toast } from 'react-toastify';
 import { wsClient } from '../../wsClientSingleton';
 
+import Modal from 'react-bootstrap/Modal';
+import { ClientOrder } from '../../Models/Base';
+
 
 
 function Ticker() {
@@ -67,58 +70,95 @@ function Ticker() {
       return;
     }
 
-    const price = side === OrderSide.sell ? quote?.bid : quote?.offer
+    const price = side === OrderSide.sell ? quote?.bid : quote?.offer;
 
-    wsClient.placeOrder(
+    setOrder({
       instrument, 
       side, 
-      new Decimal(amountVal), 
+      amount: new Decimal(amountVal), 
       price
-    );
+    });
+
+    handleShow();
+  }
+
+  const [order, setOrder]= useState<ClientOrder | undefined>(undefined) 
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setOrder(undefined);
+  } 
+  const handleShow = () => setShowPopup(true);
+
+  const handleConfirm = () => {
+    if (!order) { return; }
+    const {instrument, side, amount, price } = order;
+    wsClient.placeOrder(instrument, side, amount, price);
+    handleClosePopup();
   }
 
   return (
-    <Form className="ticker ticker__wrapper">
-      <Form.Group className="mb-3" controlId="formInstrument">
-        <Form.Label>Instrument</Form.Label>
-        <Form.Select aria-label="Default select" onChange={handleSelectChange}>
-          <option value={0}>Please select instrument</option>
-          {
-            Object.keys(Instrument)
-              .filter((key) => Number(key))
-              .map((key) => {
-                const value = Number(key)
-                return <option value={value} key={key}>{Instrument[value]}</option>
-              })
-          }
-        </Form.Select>
-      </Form.Group>
+    <>
+      <Form className="ticker ticker__wrapper">
+        <Form.Group className="mb-3" controlId="formInstrument">
+          <Form.Label>Instrument</Form.Label>
+          <Form.Select aria-label="Default select" onChange={handleSelectChange}>
+            <option value={0}>Please select instrument</option>
+            {
+              Object.keys(Instrument)
+                .filter((key) => Number(key))
+                .map((key) => {
+                  const value = Number(key)
+                  return <option value={value} key={key}>{Instrument[value]}</option>
+                })
+            }
+          </Form.Select>
+        </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formAmount">
-        <Form.Label>Amount</Form.Label>
-        <Form.Control type="number" placeholder="Enter amount" onChange={handleAmountChange} value={amount} min="0"/>
-      </Form.Group>
-      <Row>
-        <Col className="border-right">
-          <Form.Label>{quote?.bid.toString()}</Form.Label>
-        </Col>
-        <Col>
-          <Form.Label>{quote?.offer.toString()}</Form.Label>
-        </Col>
-      </Row>
-      <Row>
-        <Col className="border-right">
-          <Button className="btn-large" variant="danger" type="submit" onClick={handleSellClick}>
-            Sell
+        <Form.Group className="mb-3" controlId="formAmount">
+          <Form.Label>Amount</Form.Label>
+          <Form.Control type="number" placeholder="Enter amount" onChange={handleAmountChange} value={amount} min="0"/>
+        </Form.Group>
+        <Row>
+          <Col className="border-right">
+            <Form.Label>{quote?.bid.toString()}</Form.Label>
+          </Col>
+          <Col>
+            <Form.Label>{quote?.offer.toString()}</Form.Label>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="border-right">
+            <Button className="btn-large" variant="danger" type="submit" onClick={handleSellClick}>
+              Sell
+            </Button>
+          </Col>
+          <Col>
+            <Button className="btn-large" variant="success" type="submit" onClick={handleBuyClick}>
+              Buy
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+      <Modal show={showPopup} onHide={handleClosePopup} centered instrument={instrument}>
+        <Modal.Header closeButton>
+          <Modal.Title>Please confirm your action</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{order ? `Are you sure you want to ${OrderSide[order.side]} ${Instrument[order.instrument]} for the price: ${order.price}  `: ''}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClosePopup}>
+            Close
           </Button>
-        </Col>
-        <Col>
-          <Button className="btn-large" variant="success" type="submit" onClick={handleBuyClick}>
-            Buy
+          <Button variant="primary" onClick={handleConfirm}>
+            Confirm
           </Button>
-        </Col>
-      </Row>
-    </Form>
+        </Modal.Footer>
+      </Modal>
+  </>
+
+
   );
 }
 
