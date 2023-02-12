@@ -9,4 +9,4 @@ server/.venv/
 
 *.egg-info
 
-deploy-info.txt
+deploy.txt
